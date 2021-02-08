@@ -1,0 +1,1 @@
+module.exports.SECRET_OR_KEY = "website123finlandmasterssl"
