@@ -1,13 +1,16 @@
 "user strict";
-
+var host = require("../_helpers/constant").HOST;
+var user = require("../_helpers/constant").USER;
+var password = require("../_helpers/constant").PASSWORD;
+var db = require("../_helpers/constant").DB
 var mysql = require("mysql");
 
 //local mysql db connection
 var connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "admin",
-  database: "website_builder"
+  host: host,
+  user: user,
+  password: password,
+  database: db
 });
 
 

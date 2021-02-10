@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 require("./config/passport")(passport);
 app.use(passport.initialize());
 app.use(passport.session());
+app.use("/api/uploads", express.static("public/api/static/images"));
 
 app.use(function (req, res, next) {
     var allowedOrigins = ["http://localhost:3000"];
@@ -52,4 +53,6 @@ app.use(function (req, res, next) {
 app.listen(8080, ()=> {
     console.log('Server started at port : 8080')
 });
+
+app.use("/api/user", user_controller);
 
