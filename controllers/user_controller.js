@@ -36,11 +36,12 @@ router.post("/login", (req, res) => {
 
           const user_sel = {
             user_id: user[0].id,
-            email: user[0].username,
+            username: user[0].username,
+            email:user[0].email,
             type: user[0].type,
           };
           if (match) {
-            const token = jwt.sign(user_sel, secret,{ algorithm: 'RS256' }, {
+            const token = jwt.sign(user_sel, secret, {
               //create jwt token for the authorized user
               expiresIn: 1800000,
             });
@@ -93,7 +94,8 @@ router.post("/refreshtoken", (req, res) => {
       if (user) {
         const user_sel = {
           user_id: user[0].id,
-          email: user[0].username,
+          username: user[0].username,
+          email:user[0].email,
         };
         var refreshtoken = randtoken.uid(256);
         refreshTokens[refreshtoken] = user[0].username;
@@ -120,8 +122,7 @@ router.post(
     check("username")
       .exists()
       .isString()
-      .isAlpha()
-      .withMessage("Must be alphabetical Chars"),
+      .withMessage("isRequired"),
     check("email")
       .exists()
       .isEmail()
@@ -140,7 +141,7 @@ router.post(
       User.get_user_by_username(req.body.username, (err, user_sel) => {
         if (Object.keys(user_sel).length == 0) {
           var user = {
-            username: req.body.email,
+            username: req.body.username,
             password: req.body.password,
             email: req.body.email,
           };
@@ -174,7 +175,6 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     var id = req.query.id;
-    console.log(id,"id",req.params)
     User.get_by_user_id(id, (err, user) => {
       if (!err) {
         res.status(200).json({
@@ -224,14 +224,11 @@ router.post(
     const user_id = req.body.user;
     const password = req.body.password;
     const prvPassword = req.body.prvPassword;
-    console.log(user_id);
-    console.log(password);
-    console.log(prvPassword);
-    User.get_by_user_id(user_id, (erruser, user, result) => {
+    User.get_user_by_username(user_id, (erruser, user, result) => {
       if (erruser) {
         res.status(400).json({
           status: false,
-          msg: "Something went wrong",
+          msg:  JSON.stringify(erruser) || "Something went wrong",
           data: JSON.stringify(erruser),
         });
       }
@@ -253,7 +250,7 @@ router.post(
               }
 
               if (match) {
-                User.change_password(password, user_id, (err, user) => {
+                User.change_password(password, user[0].id, (err, user) => {
                   if (err) {
                     throw err;
                   }

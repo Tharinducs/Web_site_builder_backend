@@ -32,24 +32,28 @@ const upload = multer({
 });
 
 router.post("/images", upload.array("uploadedImages",10), (req, res, next) => {
-  console.log(req.file);
-  res.end();
+  const array = req.files.map((item)=>{
+    return item.filename
+  })
+  res.status(200).json({
+    status: true,
+    files: array,
+  });
 });
 
 router.post(
   "/createwebsite",
   passport.authenticate("jwt", { session: false }),
   [
-    check("websiteType")
+    check("type")
       .exists()
       .isString()
       .isAlpha()
       .withMessage("Must be alphabetical Chars"),
-    check("companyName")
+    check("cname")
       .exists()
       .isString()
-      .isAlpha()
-      .withMessage("Must be alphabetical Chars"),
+      .withMessage("Company name is required"),
     check("about").exists().isString().withMessage("About is required"),
     check("address").exists().isString().withMessage("Address is required"),
     check("email")
@@ -57,7 +61,7 @@ router.post(
       .isEmail()
       .normalizeEmail()
       .withMessage("should be something like user@gmail.com"),
-    check("number")
+    check("pnumber")
       .exists()
       .isString()
       .withMessage("Mobile Number is required"),
@@ -69,11 +73,11 @@ router.post(
     } else {
       let website = {
         type: req.body.type,
-        companyName: req.body.companyName,
+        companyName: req.body.cname,
         about: req.body.about,
         address: req.body.address,
         email: req.body.email,
-        mobile: req.body.number,
+        mobile: req.body.pnumber,
         userId: req.body.userId,
         uploads: req.body.uploads
       };
@@ -91,7 +95,7 @@ router.post(
               } else {
                 res.status(500).json({
                   state: false,
-                  msg: "Something went wrong please try again!",
+                  msg: err || "Something went wrong please try again!",
                 });
               }
             });
@@ -106,7 +110,7 @@ router.post(
               } else {
                 res.status(500).json({
                   state: false,
-                  msg: "Something went wrong please try again!",
+                  msg: err || "Something went wrong please try again!",
                 });
               }
             });
@@ -115,7 +119,7 @@ router.post(
       } catch (err) {
         res.status(500).json({
           state: false,
-          msg: "Something went wrong please try again!",
+          msg: err || "Something went wrong please try again!",
           err: err,
         });
       }
@@ -129,17 +133,18 @@ router.post(
   (req, res) => {
     let website = {
       type: req.body.type,
-      companyName: req.body.companyName || null,
+      companyName: req.body.cname || null,
       about: req.body.about || null,
       address: req.body.address || null,
       email: req.body.email || null,
-      mobile: req.body.number || null,
+      mobile: req.body.pnumber || null,
       userId: req.body.userId,
     };
+
     try {
       Website.get_drft_by_user_id(req.body.userId, (err, draft_sel) => {
         if (Object.keys(draft_sel).length != 0) {
-          Website.update_draft(website, website.userId, (err, website) => {
+          Website.update_draft(website, draft_sel[0].id, (err, website) => {
             if (!err) {
               res.status(200).json({
                 status: true,
@@ -149,7 +154,7 @@ router.post(
             } else {
               res.status(500).json({
                 state: false,
-                msg: "Something went wrong please try again!",
+                msg: err|| "somthing went wrong please try again!",
               });
             }
           });
@@ -164,7 +169,7 @@ router.post(
             } else {
               res.status(500).json({
                 state: false,
-                msg: "Something went wrong please try again!",
+                msg: err|| "somthing went wrong please try again!",
               });
             }
           });
@@ -173,8 +178,7 @@ router.post(
     } catch (err) {
       res.status(500).json({
         state: false,
-        msg: "Something went wrong please try again!",
-        err: err,
+        msg: err|| "somthing went wrong please try again!",
       });
     }
   }
@@ -230,16 +234,42 @@ router.get("/getwebsitesbyuserid",passport.authenticate("jwt", { session: false 
     }
 })
 
+router.get("/getwebsitebyid",passport.authenticate("jwt", { session: false }),(req,res)=>{
+  var id = req.query.id;
+  try{
+      Website.get_website_by_id(id, (err, websites_sel) => {
+          if (!err) {
+              res.status(200).json({
+                status: true,
+                websiteSel:websites_sel[0]
+              });
+            } else {
+              res.status(500).json({
+                state: false,
+                msg: "Something went wrong please try again!",
+              });
+            }
+      })
+  }catch(err){
+      res.status(500).json({
+          state: false,
+          msg: "Something went wrong please try again!",
+          err:err
+        });
+  }
+})
+
 router.put("/updateWebsite",passport.authenticate("jwt", { session: false }),(req,res)=>{
     let website = {
         id:req.body.id,
         type: req.body.type,
-        companyName: req.body.companyName,
+        companyName: req.body.cname,
         about: req.body.about,
         address: req.body.address ,
         email: req.body.email,
-        mobile: req.body.number,
+        mobile: req.body.pnumber,
         userId: req.body.userId,
+        uploads: req.body.uploads
       };
 
     try{
@@ -252,17 +282,21 @@ router.put("/updateWebsite",passport.authenticate("jwt", { session: false }),(re
               } else {
                 res.status(500).json({
                   state: false,
-                  msg: "Something went wrong please try again!",
+                  msg: err || "Something went wrong please try again!",
                 });
               }
         })
     }catch(err){
         res.status(500).json({
             state: false,
-            msg: "Something went wrong please try again!",
+            msg: err || "Something went wrong please try again!",
             err:err
           });
     }
+})
+
+router.post("/resetpassword",(req,res)=>{
+    
 })
 
 module.exports = router;

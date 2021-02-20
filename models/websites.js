@@ -2,11 +2,11 @@ var sql = require("../config/db");
 
 
 module.exports.save_websites = (website, callback) => {
-    sql.query("INSERT INTO users websites ?", website, callback);
+    sql.query("INSERT INTO  websites SET ?", website, callback);
 };
 
 module.exports.save_drafts = (website, callback) =>{
-    sql.query("INSERT INTO users drafts ?", website, callback);
+    sql.query("INSERT INTO drafts SET ?", website, callback);
 }
 
 module.exports.get_drft_by_user_id = (userId, callback) =>{
@@ -31,4 +31,8 @@ module.exports.get_website_by_id = (id,callback) =>{
 
 module.exports.update_website = (website,callback) =>{
     sql.query("UPDATE websites SET ? WHERE id='"+ website.id+"'",website,callback);
+}
+
+module.exports.get_website_by_id = (id,callback) =>{
+    sql.query("SELECT * FROM websites WHERE id='"+id+"'",callback)
 }

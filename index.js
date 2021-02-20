@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const passport = require("passport");
 var user_controller = require("./controllers/user_controller");
+var websites_controller = require("./controllers/websites_controller")
 
 var app = express();
 app.use(helmet())
@@ -19,10 +20,8 @@ app.use(passport.session());
 app.use("/api/uploads", express.static("public/api/static/images"));
 
 app.use(function (req, res, next) {
-    var allowedOrigins = ["http://localhost:3000"];
+    var allowedOrigins = ["http://localhost:3001"];
     var origin = req.headers.origin;
-    console.log(origin);
-    console.log(allowedOrigins.indexOf(origin) > -1);
     // Website you wish to allow to
     if (allowedOrigins.indexOf(origin) > -1) {
       res.setHeader("Access-Control-Allow-Origin", origin);
@@ -55,4 +54,5 @@ app.listen(8080, ()=> {
 });
 
 app.use("/api/user", user_controller);
+app.use("/api/website",websites_controller)
 
