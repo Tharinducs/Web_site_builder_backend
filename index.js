@@ -16,7 +16,7 @@ app.use(bodyParser.json());//to accept json data
 
 require("./config/passport")(passport);
 app.use(passport.initialize());
-app.use(passport.session());//session mnagaement configurations
+app.use(passport.session());//session managaement configurations
 app.use("/api/uploads", express.static("public/api/static/images")); //create the uploads url to access static files
 
 app.use(function (req, res, next) {
