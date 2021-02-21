@@ -20,11 +20,11 @@ router.post("/login", (req, res) => {
         .json({ state: false, msg: "Something went wrong please try again!" });
     }
 
-    if (!user) {
+    if (user.length === 0) {
       res.status(404).json({ state: false, msg: "No user found" });
     }
 
-    if (user) {
+    if (user.length !==0) {
       try {
         User.passwordCheck(password, user[0].password, function (err, match) {
           //check wether password is matching or not
@@ -60,6 +60,7 @@ router.post("/login", (req, res) => {
           }
         });
       } catch (error) {
+        console.log("error",error)
         res.status(400).json({
           status: false,
           msg: error,

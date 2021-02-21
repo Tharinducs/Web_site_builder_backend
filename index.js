@@ -7,17 +7,17 @@ var user_controller = require("./controllers/user_controller");
 var websites_controller = require("./controllers/websites_controller")
 
 var app = express();
-app.use(helmet())
+app.use(helmet()) //for security improvements
 
-app.use(morgan('combined'));
+app.use(morgan('combined'));//to improve logs
 
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
+app.use(bodyParser.json());//to accept json data
 
 require("./config/passport")(passport);
 app.use(passport.initialize());
-app.use(passport.session());
-app.use("/api/uploads", express.static("public/api/static/images"));
+app.use(passport.session());//session mnagaement configurations
+app.use("/api/uploads", express.static("public/api/static/images")); //create the uploads url to access static files
 
 app.use(function (req, res, next) {
     var allowedOrigins = ["http://localhost:3001"];
@@ -49,10 +49,13 @@ app.use(function (req, res, next) {
     next();
   });
 
+
+//starting the app
 app.listen(8080, ()=> {
     console.log('Server started at port : 8080')
 });
 
+//url configurations to accept http requests
 app.use("/api/user", user_controller);
 app.use("/api/website",websites_controller)
 

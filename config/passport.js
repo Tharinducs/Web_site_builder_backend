@@ -5,14 +5,14 @@ const config = require("./db");
 const User = require("../models/user");
 
 const opts = {};
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();//extract jwt frombearear authorization header
 opts.secretOrKey = secret;
 
 module.exports = function(passport) {
 
   passport.use(
     new JwtStrategy(opts, (jwt_payload, done) => {
-      User.get_by_user_id(jwt_payload.user_id, (err, user) => {
+      User.get_by_user_id(jwt_payload.user_id, (err, user) => {//extract userid from jwt and check user is exists
         if (err) {
           return done(err, false);
         }
@@ -25,4 +25,6 @@ module.exports = function(passport) {
     })
   );
 };
+
+//passport authentication validation configurations
   

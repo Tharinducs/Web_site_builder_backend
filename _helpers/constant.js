@@ -3,3 +3,7 @@ module.exports.HOST ="localhost"
 module.exports.USER = "root"
 module.exports.PASSWORD = "admin"
 module.exports.DB = "website_builder"
+
+
+
+//constants varibles used in this project 

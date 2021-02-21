@@ -4,13 +4,13 @@ var router = express.Router();
 var Website = require("../models/websites");
 const passport = require("passport");
 const { check, validationResult } = require("express-validator");
-const multer = require("multer");
+const multer = require("multer");//for file upload
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
     cb(null,  "./public/api/static/images");
   },
-  filename: function(req, file, cb) {
+  filename: function(req, file, cb) {//store file
     cb(null, new Date().toISOString().replace(/:/g,'-') + file.originalname);
   }
 });
@@ -31,6 +31,8 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
+
+//fileupload endpoint
 router.post("/images", upload.array("uploadedImages",10), (req, res, next) => {
   const array = req.files.map((item)=>{
     return item.filename
@@ -41,6 +43,8 @@ router.post("/images", upload.array("uploadedImages",10), (req, res, next) => {
   });
 });
 
+
+//website create enpoint
 router.post(
   "/createwebsite",
   passport.authenticate("jwt", { session: false }),
@@ -82,9 +86,10 @@ router.post(
         uploads: req.body.uploads
       };
       try {
+        //fist all websites will save as drft and then create the website
         Website.get_drft_by_user_id(req.body.userId, (err, draft_sel) => {
           if (Object.keys(draft_sel).length != 0) {
-            Website.delete_drft_by_user_id(req.body.userId);
+            Website.delete_drft_by_user_id(req.body.userId);//if draft avilable it will delete the drft and create website
             Website.save_websites(website, (err, website) => {
               if (!err) {
                 res.status(200).json({
@@ -99,7 +104,7 @@ router.post(
                 });
               }
             });
-          } else {
+          } else {//if drfat not avilable will create the website withoutdoing any
             Website.save_websites(website, (err, website) => {
               if (!err) {
                 res.status(200).json({
@@ -127,6 +132,7 @@ router.post(
   }
 );
 
+//website drfting endpoint
 router.post(
   "/createdraft",
   passport.authenticate("jwt", { session: false }),
@@ -142,8 +148,9 @@ router.post(
     };
 
     try {
+      //check weather already a drft available or not 
       Website.get_drft_by_user_id(req.body.userId, (err, draft_sel) => {
-        if (Object.keys(draft_sel).length != 0) {
+        if (Object.keys(draft_sel).length != 0) {//if avilable update it
           Website.update_draft(website, draft_sel[0].id, (err, website) => {
             if (!err) {
               res.status(200).json({
@@ -158,7 +165,7 @@ router.post(
               });
             }
           });
-        } else {
+        } else {//if not available will create a new draft
           Website.save_drafts(website, (err, website) => {
             if (!err) {
               res.status(200).json({
@@ -184,6 +191,7 @@ router.post(
   }
 );
 
+//endpoint too get drafts by user id
 router.get("/getdrftsbyuserid",passport.authenticate("jwt", { session: false }),(req,res)=>{
     var id = req.query.userId;
     try{
@@ -209,6 +217,7 @@ router.get("/getdrftsbyuserid",passport.authenticate("jwt", { session: false }),
     }
 })
 
+//endpoint too get websites by user id
 router.get("/getwebsitesbyuserid",passport.authenticate("jwt", { session: false }),(req,res)=>{
     var id = req.query.userId;
     try{
@@ -234,6 +243,7 @@ router.get("/getwebsitesbyuserid",passport.authenticate("jwt", { session: false 
     }
 })
 
+//enpoint to get website by id(not used in frontend )
 router.get("/getwebsitebyid",passport.authenticate("jwt", { session: false }),(req,res)=>{
   var id = req.query.id;
   try{
@@ -259,6 +269,7 @@ router.get("/getwebsitebyid",passport.authenticate("jwt", { session: false }),(r
   }
 })
 
+//endpoint to update the website
 router.put("/updateWebsite",passport.authenticate("jwt", { session: false }),(req,res)=>{
     let website = {
         id:req.body.id,
@@ -295,8 +306,5 @@ router.put("/updateWebsite",passport.authenticate("jwt", { session: false }),(re
     }
 })
 
-router.post("/resetpassword",(req,res)=>{
-    
-})
 
 module.exports = router;
