@@ -1,0 +1,43 @@
+{
+  "name": "web_site_builder_backend",
+  "version": "1.0.0",
+  "description": "This is the backend API for Web site builder using NodeJs expressJs",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "nyc mocha --recursive"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tharinducs/Web_site_builder_backend.git"
+  },
+  "keywords": [
+    "Express",
+    "Nodejs",
+    "Website",
+    "Builder"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tharinducs/Web_site_builder_backend/issues"
+  },
+  "homepage": "https://github.com/Tharinducs/Web_site_builder_backend#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.9.2",
+    "helmet": "^4.4.1",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "mysql": "^2.18.1",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "rand-token": "^1.0.1",
+    "swagger-ui-express": "^4.1.6"
+  }
+}
