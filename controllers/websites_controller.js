@@ -145,6 +145,7 @@ router.post(
       email: req.body.email || null,
       mobile: req.body.pnumber || null,
       userId: req.body.userId,
+      uploads: req.body.uploads
     };
 
     try {
