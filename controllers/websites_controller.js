@@ -83,7 +83,8 @@ router.post(
         email: req.body.email,
         mobile: req.body.pnumber,
         userId: req.body.userId,
-        uploads: req.body.uploads
+        uploads: req.body.uploads,
+        cover: req.body.cover
       };
       try {
         //fist all websites will save as drft and then create the website
@@ -145,7 +146,8 @@ router.post(
       email: req.body.email || null,
       mobile: req.body.pnumber || null,
       userId: req.body.userId,
-      uploads: req.body.uploads
+      uploads: req.body.uploads,
+      cover: req.body.cover
     };
 
     try {
@@ -281,7 +283,8 @@ router.put("/updateWebsite",passport.authenticate("jwt", { session: false }),(re
         email: req.body.email,
         mobile: req.body.pnumber,
         userId: req.body.userId,
-        uploads: req.body.uploads
+        uploads: req.body.uploads,
+        cover: req.body.cover
       };
 
     try{
