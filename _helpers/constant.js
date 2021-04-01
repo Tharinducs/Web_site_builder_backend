@@ -1,8 +1,8 @@
 module.exports.SECRET_OR_KEY = "website123finlandmasterssl"
-module.exports.HOST ="localhost"
-module.exports.USER = "root"
-module.exports.PASSWORD = "admin"
-module.exports.DB = "website_builder"
+module.exports.HOST ="http://cs.uef.fi/paikka/pma/index.php"
+module.exports.USER = "shenal"
+module.exports.PASSWORD = "j7hYgt"
+module.exports.DB = "shenal"
 
 
 
