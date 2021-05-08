@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const passport = require("passport");
 var user_controller = require("./controllers/user_controller");
 var websites_controller = require("./controllers/websites_controller")
+var cache_controller = require("./controllers/cache_controller")
 
 var app = express();
 app.use(helmet()) //for security improvements
@@ -58,4 +59,4 @@ app.listen(3011, ()=> {
 //url configurations to accept http requests
 app.use("/api/user", user_controller);
 app.use("/api/website",websites_controller)
-
+app.use("/api/cache",cache_controller)
