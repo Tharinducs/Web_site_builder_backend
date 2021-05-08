@@ -106,13 +106,26 @@ router.post(
               }
             });
           } else {//if drfat not avilable will create the website withoutdoing any
-            Website.save_websites(website, (err, website) => {
+            Website.save_websites(website, (err, result,fields) => {
+              console.log({result})
               if (!err) {
-                res.status(200).json({
-                  status: true,
-                  msg: "Succesfully created!",
-                  website: website,
-                });
+                Website.get_website_by_id(result.insertId,(err,website)=>{
+                  console.log({website})
+                  console.log({err})
+                  if(!err){
+                    res.status(200).json({
+                      status: true,
+                      msg: "Succesfully created!",
+                      website: website.length !==0 ? website[0] : website,
+                    });
+                  }else{
+                    res.status(500).json({
+                      state: false,
+                      msg: err || "Something went wrong please try again!",
+                    });
+                  }
+                })
+               
               } else {
                 res.status(500).json({
                   state: false,
