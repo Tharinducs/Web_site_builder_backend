@@ -9,10 +9,6 @@
     "pretest": "npm run lint",
     "test": "nyc mocha --recursive"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Tharinducs/Web_site_builder_backend.git"
-  },
   "keywords": [
     "Express",
     "Nodejs",
@@ -21,10 +17,6 @@
   ],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Tharinducs/Web_site_builder_backend/issues"
-  },
-  "homepage": "https://github.com/Tharinducs/Web_site_builder_backend#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
