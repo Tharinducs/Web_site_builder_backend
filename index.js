@@ -21,7 +21,7 @@ app.use(passport.session());//session managaement configurations
 app.use("/api/uploads", express.static("public/api/static/images")); //create the uploads url to access static files
 
 app.use(function (req, res, next) {
-    var allowedOrigins = ["http://localhost:3001"];
+    var allowedOrigins = ["http://localhost:3001,http://cs.uef.fi"];
     var origin = req.headers.origin;
     // Website you wish to allow to
     if (allowedOrigins.indexOf(origin) > -1) {
@@ -53,7 +53,7 @@ app.use(function (req, res, next) {
 
 //starting the app
 app.listen(3011, ()=> {
-    console.log('Server started at port : 8080')
+    console.log('Server started at port : 3011')
 });
 
 //url configurations to accept http requests
