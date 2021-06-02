@@ -12,7 +12,7 @@ const { check, validationResult } = require("express-validator");
 router.post("/login", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
-
+  console.log("req loginr",req)
   User.get_user_by_username(username, async (err, user, result) => {
     //check wether user exists
     if (err) {
@@ -136,6 +136,7 @@ router.post(
       .withMessage("Minimum 8 length"),
   ],
   (req, res) => {
+    console.log("req register",req)
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
@@ -177,6 +178,7 @@ router.get(
   "/getbyid",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    console.log("req getbyid",req)
     var id = req.query.id;
     User.get_by_user_id(id, (err, user) => {
       if (!err) {
@@ -200,6 +202,7 @@ router.get(
   "/getbyusername",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    console.log("req getbyusername",req)
     var username = req.query.user;
     
     User.get_user_by_username(username, (err, user) => {
@@ -224,6 +227,7 @@ router.post(
   "/changepassword",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    console.log("req changepassword",req)
     const user_id = req.body.user;
     const password = req.body.password;
     const prvPassword = req.body.prvPassword;

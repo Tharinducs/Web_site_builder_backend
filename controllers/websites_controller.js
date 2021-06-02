@@ -34,6 +34,7 @@ const upload = multer({
 
 //fileupload endpoint
 router.post("/images", upload.array("uploadedImages",10), (req, res, next) => {
+  console.log("req upload images",req)
   const array = req.files.map((item)=>{
     return item.filename
   })
@@ -71,6 +72,7 @@ router.post(
       .withMessage("Mobile Number is required"),
   ],
   (req, res) => {
+    console.log("req create website",req)
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
@@ -151,6 +153,7 @@ router.post(
   "/createdraft",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    console.log("req createdraft",req)
     let website = {
       type: req.body.type,
       companyName: req.body.cname || null,
@@ -209,6 +212,7 @@ router.post(
 
 //endpoint too get drafts by user id
 router.get("/getdrftsbyuserid",passport.authenticate("jwt", { session: false }),(req,res)=>{
+  console.log("req getdrftsbyuserid",req)
     var id = req.query.userId;
     try{
         Website.get_drft_by_user_id(id, (err, draft_sel) => {
@@ -235,6 +239,7 @@ router.get("/getdrftsbyuserid",passport.authenticate("jwt", { session: false }),
 
 //endpoint too get websites by user id
 router.get("/getwebsitesbyuserid",passport.authenticate("jwt", { session: false }),(req,res)=>{
+  console.log("req getwebsitesbyuserid",req)
     var id = req.query.userId;
     try{
         Website.get_websites_by_user_id(id, (err, websites_sel) => {
@@ -261,6 +266,7 @@ router.get("/getwebsitesbyuserid",passport.authenticate("jwt", { session: false 
 
 //enpoint to get website by id(not used in frontend )
 router.get("/getwebsitebyid",passport.authenticate("jwt", { session: false }),(req,res)=>{
+  console.log("req getwebsitebyid",req)
   var id = req.query.id;
   try{
       Website.get_website_by_id(id, (err, websites_sel) => {
@@ -287,6 +293,7 @@ router.get("/getwebsitebyid",passport.authenticate("jwt", { session: false }),(r
 
 //endpoint to update the website
 router.put("/updateWebsite",passport.authenticate("jwt", { session: false }),(req,res)=>{
+  console.log("req updateWebsite",req)
     let website = {
         id:req.body.id,
         type: req.body.type,
