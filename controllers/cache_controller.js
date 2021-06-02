@@ -9,7 +9,7 @@ router.get(
     passport.authenticate("jwt", { session: false }),
     (req, res) => {
       var key = req.query.key;
-      
+      console.log("req cache getmobile",req)
       Cache.get_users_cache_data(key, (err, sites) => {
         if (!err) {
           res.status(200).json({
